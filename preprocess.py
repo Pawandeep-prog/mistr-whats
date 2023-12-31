@@ -15,6 +15,7 @@ logger.info(f"Reading chats from {chat_paths}")
 
 ## main object of conatining all chats
 json_list = []
+msg_list_final = []
 
 ## reading chat file
 for file_ in chat_paths:
@@ -61,7 +62,10 @@ for file_ in chat_paths:
     for idx in range(0, len(chats_clean), 2):
         user1, msg1 = chats_clean[idx].split(":")
         user2, msg2 = chats_clean[idx + 1].split(":")
-        json_list.append({user1: msg1, user2: msg2})
+        if(user1 == user2):
+            continue
+
+        json_list.append({"QUERY": convert_to_instruction({user1: msg1, user2: msg2})})
 
 with open("./chats/clean_chats.json", "w") as f:
     f.write(json.dumps(json_list))
